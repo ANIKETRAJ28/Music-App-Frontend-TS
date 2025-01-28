@@ -3,15 +3,15 @@ import {
   Home,
   Library,
   Search,
-  // Plus,
+  Plus,
   ListOrdered,
   AudioLines,
   Music2,
   CircleUser,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// import { ScrollArea } from "@/components/ui/scroll-area";
-// import { Separator } from "@/components/ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { IPlaylist } from "@/types";
 import { useState } from "react";
 
@@ -23,7 +23,7 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export function Sidebar({
   className,
-  // playlists,
+  playlists,
   expanded = true,
   setExpanded,
 }: SidebarProps) {
@@ -31,9 +31,9 @@ export function Sidebar({
 
   return (
     <div className={cn("h-full", className)}>
-      <div className="flex w-full sm:items-center md:flex-col space-y-4 py-4 h-full justify-between">
-        <div>
-          <div className="flex sm:flex-col gap-2 sm:gap-4 justify-around items-center p-2">
+      <div className="flex w-full items-center flex-col space-y-4 py-4 h-full">
+        <div className="h-fit w-full">
+          <div className="flex flex-col gap-4 justify-around p-2">
             <div
               onClick={() => setExpanded(!expanded)}
               className={`flex items-center mb-2 px-2 cursor-pointer ${
@@ -44,7 +44,7 @@ export function Sidebar({
               <Music2 className="h-8 w-8" />
               {expanded && <h1 className="text-xl font-bold">Play</h1>}
             </div>
-            <div className="space-y-1 gap-2 sm:gap-0 flex sm:flex-col justify-between">
+            <div className="space-y-1 gap-0 flex flex-col justify-between">
               <Button
                 variant={selectedTab === "home" ? "default" : "ghost"}
                 size="default"
@@ -132,38 +132,13 @@ export function Sidebar({
               </Button>
             </div>
           </div>
+          {expanded && <Separator />}
         </div>
-        <div className="flex flex-col gap-2 justify-between">
-          {/* <ScrollArea className="h-[520px] px-2">
+        <div className="flex flex-col justify-between h-full w-full overflow-hidden">
+          <ScrollArea className="px-2 w-full">
             {expanded && (
               <div>
-                <div className="px-4 py-2">
-                  <div className="flex items-center justify-between">
-                    <h2 className="px-2 text-lg font-semibold tracking-tight">
-                      Playlists
-                    </h2>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <div className="space-y-1 p-2">
-                    {playlists?.map((playlist) => (
-                      <Button
-                        key={playlist.id}
-                        variant="ghost"
-                        size="sm"
-                        className="w-full justify-start font-normal"
-                      >
-                        {playlist.name}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-                <div className="px-4 py-2">
+                <div className="py-2">
                   <div className="flex items-center justify-between">
                     <h2 className="px-2 text-lg font-semibold tracking-tight">
                       Playlists
@@ -191,13 +166,13 @@ export function Sidebar({
                 </div>
               </div>
             )}
-          </ScrollArea> */}
-          <div className="flex flex-col gap-1">
-            {/* <Separator /> */}
+          </ScrollArea>
+          <div className="w-full">
+            {expanded && <Separator />}
             {
               <div
                 onClick={() => setExpanded(!expanded)}
-                className={`flex items-center sm:pt-2 px-2 cursor-pointer ${
+                className={`flex items-center gap-4 pt-2 px-2 cursor-pointer ${
                   !expanded && "justify-center"
                 }`}
               >

@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Slider } from "@/components/ui/slider";
+import { BottomBar } from "./components/BottomBar";
 
 // Mock data for demonstration
 const mockPlaylists: IPlaylist[] = [
@@ -148,13 +149,13 @@ function App() {
   // const [queueVisible, setQueueVisible] = useState(false);
 
   return (
-    <div className="h-screen bg-gradient-to-br from-emerald-900 to-black">
-      <div className="flex flex-col-reverse md:flex-row h-full">
+    <div className="h-screen bg-gradient-to-br from-cyan-950 to-black">
+      <div className="flex flex-row h-full">
         {/* Expandable Sidebar for larger screens */}
         <div
           className={cn(
-            `flex flex-col sm:flex-row bg-black/90 backdrop-blur-lg transition-all duration-300 shrink-0" ${
-              sidebarExpanded ? "sm:w-[170px] w-full" : "w-full sm:w-[70px]"
+            `hidden lg:flex flex-col lg:flex-row  bg-gray-900 backdrop-blur-lg transition-all duration-300 shrink-0" ${
+              sidebarExpanded ? "w-[250px]" : "w-[70px]"
             }`
           )}
         >
@@ -177,6 +178,7 @@ function App() {
             className="text-white"
           />
         </div>
+        <BottomBar />
 
         {/* Main content */}
         <main className="flex-1 overflow-y-auto p-4 lg:p-6 pb-[160px] lg:pb-6 min-w-0">
@@ -204,12 +206,14 @@ function App() {
           </div> */}
           {/* Current Song Info */}
           <div>
-            <div className="flex flex-col sm:flex-row gap-10">
-              <img
-                src={currentSong.cover}
-                alt={currentSong.title}
-                className="w-96 aspect-square rounded-lg mb-4 object-cover"
-              />
+            <div className="flex flex-col md:flex-row md:gap-10">
+              <div className="flex md:justify-start justify-center w-full md:w-fit">
+                <img
+                  src={currentSong.cover}
+                  alt={currentSong.title}
+                  className="w-96 aspect-square rounded-lg mb-4 object-cover"
+                />
+              </div>
               <div className="flex flex-col justify-between my-4">
                 <div>
                   <h3 className="text-white text-xl font-semibold mb-1">
@@ -224,25 +228,25 @@ function App() {
                       size="icon"
                       className="text-white"
                     >
-                      <SkipBack className="h-5 w-5" />
+                      <SkipBack className="h-5 w-5  text-teal-800" />
                     </Button>
                     <Button
                       variant="default"
                       size="icon"
-                      className="h-10 w-10 bg-white text-black hover:bg-white/90"
+                      className="bg-white/90 hover:bg-white/90"
                     >
-                      <Play className="h-6 w-6" />
+                      <Play className="h-6 w-6 text-teal-800" />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
                       className="text-white"
                     >
-                      <SkipForward className="h-5 w-5" />
+                      <SkipForward className="h-5 w-5 text-teal-800" />
                     </Button>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Volume2 className="h-5 w-5 text-white/70" />
+                    <Volume2 className="h-5 w-5 text-teal-800" />
                     <Slider
                       defaultValue={[75]}
                       max={100}
