@@ -7,13 +7,15 @@ import {
   ListOrdered,
   AudioLines,
   Music2,
-  CircleUser,
+  // CircleUser,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { IPlaylist } from "@/types";
 import { useState } from "react";
+import { RootState } from "@/store/store";
+import { useSelector } from "react-redux";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   playlists: IPlaylist[];
@@ -28,6 +30,7 @@ export function Sidebar({
   setExpanded,
 }: SidebarProps) {
   const [selectedTab, setSelectedTab] = useState("home");
+  const user = useSelector((state: RootState) => state.user);
 
   return (
     <div className={cn("h-full", className)}>
@@ -93,7 +96,7 @@ export function Sidebar({
                   setSelectedTab("library");
                 }}
               >
-                <Library className={cn("h-4 w-4", expanded && "mr-2")} />
+                <Library />
                 {expanded && "Your Library"}
               </Button>
               <Button
@@ -110,7 +113,7 @@ export function Sidebar({
                   setSelectedTab("queue");
                 }}
               >
-                <ListOrdered className={cn("h-4 w-4", expanded && "mr-2")} />
+                <ListOrdered />
                 {expanded && "Queue"}
               </Button>
               <Button
@@ -127,7 +130,7 @@ export function Sidebar({
                   setSelectedTab("jam");
                 }}
               >
-                <AudioLines className={cn("h-4 w-4", expanded && "mr-2")} />
+                <AudioLines />
                 {expanded && "Jam"}
               </Button>
             </div>
@@ -138,32 +141,39 @@ export function Sidebar({
           <ScrollArea className="px-2 w-full">
             {expanded && (
               <div>
-                <div className="py-2">
-                  <div className="flex items-center justify-between">
-                    <h2 className="px-2 text-lg font-semibold tracking-tight">
-                      Playlists
-                    </h2>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <div className="space-y-1 p-2">
-                    {playlists?.map((playlist) => (
-                      <Button
-                        key={playlist.id}
-                        variant="ghost"
-                        size="sm"
-                        className="w-full justify-start font-normal"
-                      >
+                {playlists.map((playlist) => (
+                  <div
+                    key={playlist.id}
+                    className="py-2 w-full"
+                  >
+                    <div className="w-[180px] flex items-center justify-around">
+                      <h2 className="px-2 text-lg font-semibold overflow-hidden text-ellipsis">
                         {playlist.name}
+                      </h2>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                      >
+                        <Plus className="h-2 w-2" />
                       </Button>
-                    ))}
+                    </div>
+                    <div className="space-y-1 p-2 w-full overflow-hidden text-ellipsis">
+                      {playlist.songs.map((song) => (
+                        <Button
+                          key={song.id}
+                          variant="ghost"
+                          size="sm"
+                          className="w-[168px] justify-start"
+                        >
+                          <p className="overflow-hidden text-ellipsis">
+                            {song.url}
+                          </p>
+                        </Button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             )}
           </ScrollArea>
@@ -176,8 +186,13 @@ export function Sidebar({
                   !expanded && "justify-center"
                 }`}
               >
-                <CircleUser className="h-8 w-8" />
-                {expanded && <h1 className="text-xl font-bold">Aniket Raj</h1>}
+                <img
+                  className="h-10 w-10"
+                  src={`${user.avatar}`}
+                  alt={`${user.name}`}
+                />
+                {/* <CircleUser className="h-8 w-8" /> */}
+                {expanded && <h1 className="text-xl font-bold">{user.name}</h1>}
               </div>
             }
           </div>

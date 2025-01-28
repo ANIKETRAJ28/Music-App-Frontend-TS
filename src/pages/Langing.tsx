@@ -1,11 +1,32 @@
-import { getUser } from "@/apis/getUser";
+// import { getUser } from "@/apis/getUser";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
+// import { setUser } from "@/store/user";
 import { Music2Icon } from "lucide-react";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { useNavigate } from "react-router-dom";
+import { login } from "@/store/user";
 
 export function LandingPage() {
+  const dispatch: AppDispatch = useDispatch();
+  // const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const getDetails = async () => {
+    try {
+      await dispatch(login());
+      navigate("/music");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      // console.error(error);
+      toast({ title: error, variant: "destructive" });
+    }
+  };
+
   useEffect(() => {
-    getUser();
+    getDetails();
   }, []);
 
   return (

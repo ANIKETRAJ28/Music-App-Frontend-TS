@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { EmailValidator, OtpValidator, ProfileValidator } from "@/utils/signup";
 import { useToast } from "@/hooks/use-toast";
-import { completeProfile, registerEmail, verifyOtp } from "@/apis/signup";
+import { completeProfile, registerEmail, verifyOtp } from "@/apis/signUp";
 
 const STEPS = {
   EMAIL: 0,

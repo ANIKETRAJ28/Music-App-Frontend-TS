@@ -1,117 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/SideBar";
-// import { MusicPlayer } from "@/components/MusicPlayer";
 import { IPlaylist, ISong } from "@/types";
 import { Button } from "@/components/ui/button";
-import {
-  // ChevronLeft,
-  // ChevronRight,
-  // Home,
-  // Library,
-  // List,
-  Play,
-  // Search,
-  SkipBack,
-  SkipForward,
-  Volume2,
-} from "lucide-react";
+import { Play, SkipBack, SkipForward, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Slider } from "@/components/ui/slider";
 import { BottomBar } from "@/components/BottomBar";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { useNavigate } from "react-router-dom";
+import { getDefaultPlaylist } from "@/store/defaultPlaylist";
+import { toast } from "@/hooks/use-toast";
 
-// Mock data for demonstration
-const mockPlaylists: IPlaylist[] = [
-  {
-    id: "1",
-    name: "Anime Favorites",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "2",
-    name: "J-Pop Hits",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "3",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-  {
-    id: "4",
-    name: "Epic Soundtracks",
-    userId: "user1",
-    songs: [],
-  },
-];
+// const mockPlaylists: IPlaylist[] = [];
 
 const currentSong: ISong = {
   id: "1",
@@ -123,30 +24,31 @@ const currentSong: ISong = {
     "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=300&h=300&fit=crop",
 };
 
-// const queue: ISong[] = [
-//   {
-//     id: "2",
-//     url: "https://example.com/song2.mp3",
-//     title: "Again",
-//     artist: "Yui",
-//     album: "Fullmetal Alchemist: Brotherhood OST",
-//     cover:
-//       "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300&h=300&fit=crop",
-//   },
-//   {
-//     id: "3",
-//     url: "https://example.com/song3.mp3",
-//     title: "The Hero!!",
-//     artist: "JAM Project",
-//     album: "One Punch Man OST",
-//     cover:
-//       "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=300&h=300&fit=crop",
-//   },
-// ];
-
 export function MusicPage() {
   const [sidebarExpanded, setSidebarExpanded] = useState(true);
-  // const [queueVisible, setQueueVisible] = useState(false);
+  const user = useSelector((state: RootState) => state.user);
+  const [playlist, setPlaylist] = useState<IPlaylist[]>([]);
+  const navigate = useNavigate();
+  const dispatch: AppDispatch = useDispatch();
+
+  const defaultPlaylist = async () => {
+    try {
+      const response = await dispatch(
+        getDefaultPlaylist(user.defaultPlaylist?.id as string)
+      );
+      console.log("res...", response);
+      setPlaylist([response.payload]);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      // console.error(error);
+      toast({ title: error, variant: "destructive" });
+    }
+  };
+
+  useEffect(() => {
+    if (!user.id) navigate("/");
+    defaultPlaylist();
+  }, []);
 
   return (
     <div className="h-screen bg-gradient-to-br from-cyan-950 to-black">
@@ -154,8 +56,8 @@ export function MusicPage() {
         {/* Expandable Sidebar for larger screens */}
         <div
           className={cn(
-            `hidden lg:flex flex-col lg:flex-row  bg-gray-900 backdrop-blur-lg transition-all duration-300 shrink-0" ${
-              sidebarExpanded ? "w-[250px]" : "w-[70px]"
+            `hidden lg:flex flex-col lg:flex-row bg-gray-900 backdrop-blur-lg transition-all duration-300 shrink-0" ${
+              sidebarExpanded ? "w-[200px]" : "w-[70px]"
             }`
           )}
         >
@@ -172,7 +74,7 @@ export function MusicPage() {
             )}
           </Button> */}
           <Sidebar
-            playlists={mockPlaylists}
+            playlists={playlist}
             expanded={sidebarExpanded}
             setExpanded={setSidebarExpanded}
             className="text-white"

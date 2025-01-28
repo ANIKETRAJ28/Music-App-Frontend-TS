@@ -1,10 +1,6 @@
 export interface ISong {
   id: string;
   url: string;
-  title?: string;
-  artist?: string;
-  album?: string;
-  cover?: string;
 }
 
 export interface IPlaylist {
@@ -15,10 +11,10 @@ export interface IPlaylist {
 }
 
 export interface IUser {
-  id: string;
+  id: string | null;
   name: string | null;
   username: string | null;
-  email: string;
-  avatar: string;
+  email: string | null;
+  avatar: string | null;
   defaultPlaylist: IPlaylist | null;
 }
