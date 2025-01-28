@@ -35,8 +35,6 @@ export function SignUp() {
   const { toast } = useToast();
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [errors, setErrors] = useState({
-    email: "",
-    otp: "",
     name: "",
     username: "",
     password: "",
@@ -51,6 +49,7 @@ export function SignUp() {
       setStep(STEPS.OTP);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      setFormData({ email: "", name: "", otp: "", password: "", username: "" });
       toast({ title: error, variant: "destructive" });
     }
   };
@@ -64,13 +63,13 @@ export function SignUp() {
       setStep(STEPS.PROFILE);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      setFormData({ ...formData, otp: "" });
       toast({ title: error, variant: "destructive" });
     }
   };
 
   const handleProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("hehehe");
     try {
       try {
         ProfileValidator.parse({
@@ -79,18 +78,16 @@ export function SignUp() {
           password: formData.password,
         });
       } catch (error) {
-        if (error instanceof Error && "errors" in error) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          error.errors.forEach((err: any) => {
-            if (err.path) {
-              setErrors((prev) => ({ ...prev, [err.path[0]]: err.message }));
-            }
-          });
-        } else {
-          console.log(error);
-        }
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        error.errors.forEach((err: any) => {
+          if (err.path) {
+            setErrors((prev) => ({ ...prev, [err.path[0]]: err.message }));
+          }
+        });
+        console.log("before here...");
+        return;
       }
       const result = await completeProfile({
         name: formData.name,
@@ -101,6 +98,9 @@ export function SignUp() {
       setStep(STEPS.PROFILE);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
+      setErrors({ name: "", password: "", username: "" });
+      setFormData({ email: "", name: "", otp: "", password: "", username: "" });
+      setStep(STEPS.EMAIL);
       toast({ title: error, variant: "destructive" });
     }
   };
@@ -229,14 +229,13 @@ export function SignUp() {
               onSubmit={handleEmailSubmit}
               className="space-y-4"
             >
-              <div className="space-y-5 relative">
+              <div className="space-y-2 relative">
                 <Label
                   htmlFor="email"
                   className="text-cyan-100/80"
                 >
                   Email address
                 </Label>
-                <p className="absolute text-teal-400 text-xs top-1">*Hello</p>
                 <div className="relative">
                   <Mail className="absolute left-3 top-[10px] h-5 w-5 text-cyan-100/80" />
                   <Input
@@ -254,7 +253,7 @@ export function SignUp() {
                 type="submit"
                 className="w-full bg-teal-800 hover:bg-teal-600"
               >
-                Continue
+                Send OTP
               </Button>
             </form>
           )}
@@ -264,11 +263,10 @@ export function SignUp() {
               onSubmit={handleOTPSubmit}
               className="space-y-4"
             >
-              <div className="space-y-5 relative">
+              <div className="space-y-2 relative">
                 <Label className="text-cyan-100/80">
                   Enter verification code
                 </Label>
-                <p className="absolute text-teal-400 text-xs top-1">*Hello</p>
                 <div className="flex gap-2 justify-center">
                   {[...Array(6)].map((_, index) => (
                     <Input
@@ -401,19 +399,9 @@ export function SignUp() {
               <Button
                 type="submit"
                 className="w-full bg-teal-800 hover:bg-teal-600"
-                onClick={(e) => {
-                  console.log(formData);
-                  handleProfileSubmit(e);
-                  // const res = SignupSchema.parse(formData);
-                  // console.log(res);
-                  toast({
-                    title: "Success",
-                    description: "Form submitted successfully",
-                    variant: "default",
-                  });
-                }}
+                onClick={(e) => handleProfileSubmit(e)}
               >
-                Complete Signup
+                Complete Profile
               </Button>
             </form>
           )}
