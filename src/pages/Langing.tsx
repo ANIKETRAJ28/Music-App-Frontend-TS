@@ -16,8 +16,11 @@ export function LandingPage() {
 
   const getDetails = async () => {
     try {
+      console.log("Logging in...");
       await dispatch(login());
-      navigate("/music");
+      console.log("Logged in in in...");
+      await navigate("/music");
+      console.log("Navigated to music...");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // console.error(error);

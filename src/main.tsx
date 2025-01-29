@@ -6,12 +6,15 @@ import { BrowserRouter } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Provider } from "react-redux";
 import store from "./store/store.ts";
+import { TooltipProvider } from "@radix-ui/react-tooltip";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <TooltipProvider>
+          <App />
+        </TooltipProvider>
         <Toaster />
       </BrowserRouter>
     </Provider>

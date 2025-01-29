@@ -10,9 +10,14 @@ const initialState: IPlaylist = {
 };
 
 export const getDefaultPlaylist = createAsyncThunk(
-  "/playlist",
+  "default/playlist",
   async (id: string) => {
     try {
+      if (localStorage.getItem("defaultPlaylistSongs")) {
+        return JSON.parse(
+          localStorage.getItem("defaultPlaylistSongs") as string
+        );
+      }
       const response = await axiosInstance.get(`/playlist/${id}`);
       return response.data.data;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -40,7 +45,10 @@ const defaultPlaylistSlice = createSlice({
       state.userId = action.payload.userId;
       state.songs = action.payload.songs;
 
-      localStorage.setItem("defaultPlaylist", JSON.stringify(action.payload));
+      localStorage.setItem(
+        "defaultPlaylistSongs",
+        JSON.stringify(action.payload)
+      );
     });
   },
 });

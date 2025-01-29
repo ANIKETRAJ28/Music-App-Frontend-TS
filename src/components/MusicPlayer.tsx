@@ -151,7 +151,7 @@ export function MusicPlayer({
               <img
                 src={song.cover}
                 alt={song.title}
-                className="w-12 h-12 rounded-md"
+                className="w-20 h-15 rounded-md"
               />
               <div>
                 <p className="text-white font-medium">{song.title}</p>

@@ -13,24 +13,48 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { IPlaylist } from "@/types";
-import { useState } from "react";
+import { useEffect } from "react";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@radix-ui/react-tooltip";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
-  playlists: IPlaylist[];
   expanded?: boolean;
   setExpanded: (expanded: boolean) => void;
+  playlists: IPlaylist[];
+  setPlaylists: (playlists: IPlaylist[]) => void;
+  selectedTab: string;
+  setSelectedTab: (selectedTab: string) => void;
 }
 
 export function Sidebar({
   className,
-  playlists,
   expanded = true,
   setExpanded,
+  playlists,
+  setPlaylists,
+  selectedTab,
+  setSelectedTab,
 }: SidebarProps) {
-  const [selectedTab, setSelectedTab] = useState("home");
   const user = useSelector((state: RootState) => state.user);
+  const defaultPlaylist = useSelector(
+    (state: RootState) => state.defaultPlaylist
+  );
+  const allPlaylists = useSelector((state: RootState) => state.playlists);
+
+  useEffect(() => {
+    if (selectedTab === "home") {
+      console.log("default playlist...", defaultPlaylist);
+      setPlaylists([defaultPlaylist]);
+    } else if (selectedTab === "library") {
+      console.log("all playlists...", allPlaylists);
+      setPlaylists(allPlaylists.playlists);
+    }
+  }, [selectedTab]);
 
   return (
     <div className={cn("h-full", className)}>
@@ -137,66 +161,22 @@ export function Sidebar({
           </div>
           {expanded && <Separator />}
         </div>
-        <div className="flex flex-col justify-between h-full w-full overflow-hidden">
-          <ScrollArea className="px-2 w-full">
-            {expanded && (
-              <div>
-                {playlists.map((playlist) => (
-                  <div
-                    key={playlist.id}
-                    className="py-2 w-full"
-                  >
-                    <div className="w-[180px] flex items-center justify-around">
-                      <h2 className="px-2 text-lg font-semibold overflow-hidden text-ellipsis">
-                        {playlist.name}
-                      </h2>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8"
-                      >
-                        <Plus className="h-2 w-2" />
-                      </Button>
-                    </div>
-                    <div className="space-y-1 p-2 w-full overflow-hidden text-ellipsis">
-                      {playlist.songs.map((song) => (
-                        <Button
-                          key={song.id}
-                          variant="ghost"
-                          size="sm"
-                          className="w-[168px] justify-start"
-                        >
-                          <p className="overflow-hidden text-ellipsis">
-                            {song.url}
-                          </p>
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
-          <div className="w-full">
-            {expanded && <Separator />}
-            {
-              <div
-                onClick={() => setExpanded(!expanded)}
-                className={`flex items-center gap-4 pt-2 px-2 cursor-pointer ${
-                  !expanded && "justify-center"
-                }`}
-              >
-                <img
-                  className="h-10 w-10"
-                  src={`${user.avatar}`}
-                  alt={`${user.name}`}
-                />
-                {/* <CircleUser className="h-8 w-8" /> */}
-                {expanded && <h1 className="text-xl font-bold">{user.name}</h1>}
-              </div>
-            }
+        {
+          <div
+            onClick={() => setExpanded(!expanded)}
+            className={`flex items-center gap-4 pt-2 px-2 cursor-pointer ${
+              !expanded && "justify-center"
+            }`}
+          >
+            <img
+              className="h-10 w-10"
+              src={`${user.avatar}`}
+              alt={`${user.name}`}
+            />
+            {/* <CircleUser className="h-8 w-8" /> */}
+            {expanded && <h1 className="text-xl font-bold">{user.name}</h1>}
           </div>
-        </div>
+        }
       </div>
     </div>
   );
