@@ -1,26 +1,12 @@
 import { cn } from "@/lib/utils";
-import {
-  Home,
-  Library,
-  Search,
-  Plus,
-  ListOrdered,
-  AudioLines,
-  Music2,
-  // CircleUser,
-} from "lucide-react";
+import { Home, Library, AudioLines, Music2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+// import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { IPlaylist } from "@/types";
 import { useEffect } from "react";
 import { RootState } from "@/store/store";
 import { useSelector } from "react-redux";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@radix-ui/react-tooltip";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   expanded?: boolean;
@@ -35,7 +21,6 @@ export function Sidebar({
   className,
   expanded = true,
   setExpanded,
-  playlists,
   setPlaylists,
   selectedTab,
   setSelectedTab,
@@ -48,10 +33,8 @@ export function Sidebar({
 
   useEffect(() => {
     if (selectedTab === "home") {
-      console.log("default playlist...", defaultPlaylist);
       setPlaylists([defaultPlaylist]);
     } else if (selectedTab === "library") {
-      console.log("all playlists...", allPlaylists);
       setPlaylists(allPlaylists.playlists);
     }
   }, [selectedTab]);
@@ -90,23 +73,6 @@ export function Sidebar({
                 {expanded && "Home"}
               </Button>
               <Button
-                variant={selectedTab === "search" ? "default" : "ghost"}
-                size="default"
-                className={cn(
-                  "w-full",
-                  expanded ? "justify-start" : "justify-center"
-                )}
-                onClick={() => {
-                  if (!expanded) {
-                    setExpanded(!expanded);
-                  }
-                  setSelectedTab("search");
-                }}
-              >
-                <Search />
-                {expanded && "Search"}
-              </Button>
-              <Button
                 variant={selectedTab === "library" ? "default" : "ghost"}
                 size="default"
                 className={cn(
@@ -122,23 +88,6 @@ export function Sidebar({
               >
                 <Library />
                 {expanded && "Your Library"}
-              </Button>
-              <Button
-                variant={selectedTab === "queue" ? "default" : "ghost"}
-                size="default"
-                className={cn(
-                  "w-full",
-                  expanded ? "justify-start" : "justify-center"
-                )}
-                onClick={() => {
-                  if (!expanded) {
-                    setExpanded(!expanded);
-                  }
-                  setSelectedTab("queue");
-                }}
-              >
-                <ListOrdered />
-                {expanded && "Queue"}
               </Button>
               <Button
                 variant={selectedTab === "jam" ? "default" : "ghost"}
