@@ -3,11 +3,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-export function ProtectedRoutes({
-  children,
-}: {
-  children: React.ReactElement;
-}) {
+export function Layout({ children }: { children: React.ReactElement }) {
   const navigate = useNavigate();
   const { id } = useSelector((state: RootState) => state.user);
 
@@ -18,5 +14,9 @@ export function ProtectedRoutes({
     }
   }, []);
 
-  return <div>{children}</div>;
+  return (
+    <div className="min-h-screen pb-16 bg-gradient-to-br from-cyan-950 to-black">
+      {children}
+    </div>
+  );
 }

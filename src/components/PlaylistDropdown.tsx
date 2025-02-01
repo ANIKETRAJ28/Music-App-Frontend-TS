@@ -168,7 +168,7 @@ export function PlaylistDropdown({
               <img
                 src={song.thumbnail}
                 alt={song.title}
-                className="w-12 h-12 object-cover rounded-md"
+                className="w-15 h-12 object-cover rounded-md"
               />
               <div className="flex-1 min-w-0">
                 <p className="font-medium truncate">{song.title}</p>

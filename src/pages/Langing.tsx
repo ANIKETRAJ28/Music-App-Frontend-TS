@@ -19,7 +19,7 @@ export function LandingPage() {
       console.log("Logging in...");
       await dispatch(login());
       console.log("Logged in in in...");
-      await navigate("/music");
+      await navigate("/home");
       console.log("Navigated to music...");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

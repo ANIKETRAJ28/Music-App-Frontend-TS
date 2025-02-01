@@ -9,7 +9,7 @@ import { BottomBar } from "@/components/BottomBar";
 import { cn } from "@/lib/utils";
 import { Sidebar } from "@/components/SideBar";
 
-export function MusicPage() {
+export function LibraryPage() {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const { user, sidebar } = useSelector((state: RootState) => state);
@@ -24,7 +24,7 @@ export function MusicPage() {
     }
     SetPlaylist(
       selectedTab,
-      user.defaultPlaylist?.id as string,
+      user.id as string,
       dispatch,
       playlists,
       setPlaylists
